@@ -216,6 +216,7 @@ inoremap <C-U> <C-G>u<C-U>
 iab Ydate <C-R>=strftime("%Y/%m/%d")<CR>
 iab Ydu <C-R>=strftime("%Y_%m_%d")<CR>
 iab Ydt <C-R>=strftime("%Y/%m/%d %H:%M")<CR>
+iab Yti <C-R>=strftime("%H:%M")<CR>
 iab perline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 iab bline """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iab teh the
