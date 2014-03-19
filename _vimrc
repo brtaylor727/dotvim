@@ -34,6 +34,7 @@ if has("autocmd")
     autocmd BufNewFile,BufRead *.R setf r
     autocmd BufRead .Rprofile setf r
     autocmd BufNewFile,BufRead *.str setf charmm
+    autocmd BufNewFile,BufRead *.md setf markdown
 
     "autocmd BufWritePost .vimrc source $MYVIMRC
 
@@ -213,10 +214,10 @@ inoremap <C-U> <C-G>u<C-U>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 " Useful abbrevs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-iab Ydate <C-R>=strftime("%Y/%m/%d")<CR>
-iab Ydu <C-R>=strftime("%Y_%m_%d")<CR>
-iab Ydt <C-R>=strftime("%Y/%m/%d %H:%M")<CR>
-iab Yti <C-R>=strftime("%H:%M")<CR>
+iab <silent> ydate <C-R>=strftime("%Y/%m/%d")<CR>
+iab <silent> ydu <C-R>=strftime("%Y_%m_%d")<CR>
+iab <silent> ydt <C-R>=strftime("%Y/%m/%d %H:%M")<CR>
+iab <silent> yti <C-R>=strftime("%H:%M")<CR>
 iab perline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 iab bline """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iab teh the
