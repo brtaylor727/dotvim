@@ -97,13 +97,9 @@ set formatoptions=qrn1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 " Theme/Colors
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-if ! has("gui_running") 
-    set t_Co=256
-endif
-
 set background=dark
-"let g:solarized_termcolors=256
-colorscheme default
+let g:solarized_termcolors=256
+colorscheme kolor
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 " Vim UI
@@ -274,3 +270,8 @@ set statusline=%<%f\ %y%h%m%r%=%l,%c\ \ \ \ [textwidth=%{&textwidth}]\ %P\ %{str
 
 set dictionary+=/usr/share/dict/words
 set complete+=k
+
+" Ack and Ctrl-P integration
+nnoremap \ :Ack<SPACE>
+let g:ctrlp_use_caching = 0
+nnoremap K :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
