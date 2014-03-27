@@ -42,7 +42,7 @@ if has("autocmd")
     autocmd FileType * exe('setl dict+='.$VIMRUNTIME.'/syntax/'.&filetype.'.vim')
 endif
 
-set modelines=0
+set modeline
 
 set tabstop=4 "An indentation level every four columns"
 set softtabstop=4 "unify
@@ -275,3 +275,4 @@ set complete+=k
 nnoremap \ :Ack<SPACE>
 let g:ctrlp_use_caching = 0
 nnoremap K :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nmap <c-w><c-]> "tyaw:stjump <c-r>t<cr>
