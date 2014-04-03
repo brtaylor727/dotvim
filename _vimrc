@@ -43,6 +43,7 @@ if has("autocmd")
 endif
 
 set modeline
+set modelines=3
 
 set tabstop=4 "An indentation level every four columns"
 set softtabstop=4 "unify
@@ -225,6 +226,10 @@ iab textbg textbf
 " have command-line completion <Tab> (for filenames, help topics, option names)
 " first list the available options and complete the longest common part, then
 " have further <Tab>s cycle through the possibilities:
+
+set dictionary+=/usr/share/dict/words
+set complete=.,w,b,u,t,i,k
+
 set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe,*.swp
 set browsedir=buffer
@@ -268,11 +273,9 @@ set statusline=%<%f\ %y%h%m%r%=%l,%c\ \ \ \ [textwidth=%{&textwidth}]\ %P\ %{str
 "Plugin Options
 "set comments=b:#,:%,n:>
 
-set dictionary+=/usr/share/dict/words
-set complete+=k
-
 " Ack and Ctrl-P integration
 nnoremap \ :Ack<SPACE>
 let g:ctrlp_use_caching = 0
 nnoremap K :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
 nmap <c-w><c-]> "tyaw:stjump <c-r>t<cr>
+nnoremap <leader>. :CtrlPTag<cr>
