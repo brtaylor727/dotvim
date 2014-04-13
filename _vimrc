@@ -279,3 +279,4 @@ let g:ctrlp_use_caching = 0
 nnoremap K :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
 nmap <c-w><c-]> "tyaw:stjump <c-r>t<cr>
 nnoremap <leader>. :CtrlPTag<cr>
+nnoremap <leader><leader> :xa<cr>
