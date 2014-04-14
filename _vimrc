@@ -4,7 +4,15 @@
 set nocompatible
 filetype off
 
-execute pathogen#infect()
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+"execute pathogen#infect()
+Plugin 'gmarik/vundle'
+Plugin 'tpope/vim-fugitive'
+Plugin 'kien/ctrlp.vim'
+Plugin 'zeis/vim-kolor'
+Plugin 'mileszs/ack.vim'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 " Autocommand Control
@@ -20,7 +28,7 @@ if has("autocmd")
     augroup vimrcEx
     au!
     " For all text files set 'textwidth' to 80 characters.
-    "autocmd FileType text setl textwidth=80
+    autocmd FileType text setl textwidth=100
 
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
@@ -99,7 +107,6 @@ set formatoptions=qrn1
 " Theme/Colors
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 set background=dark
-let g:solarized_termcolors=256
 colorscheme kolor
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
@@ -157,8 +164,16 @@ vnoremap <F1> <ESC>
 
 map <up> <nop>
 map <down> <nop>
-map <left> <Home>
-map <right> <End>
+map <left> <nop>
+map <right> <nop>
+inoremap <up> <nop>
+vnoremap <up> <nop>
+inoremap <down> <nop>
+vnoremap <down> <nop>
+inoremap <left> <nop>
+vnoremap <left> <nop>
+inoremap <right> <nop>
+vnoremap <right> <nop>
 nnoremap ; :
 
 let mapleader=","
@@ -227,7 +242,7 @@ iab textbg textbf
 " first list the available options and complete the longest common part, then
 " have further <Tab>s cycle through the possibilities:
 
-set dictionary+=/usr/share/dict/words
+set dict+=/usr/share/dict/words
 set complete=.,w,b,u,t,i,k
 
 set wildmode=list:longest,full
