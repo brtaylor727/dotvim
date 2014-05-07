@@ -42,7 +42,7 @@ if has("autocmd")
     filetype plugin indent on
     au FocusLost * :wa
     au BufEnter * :syntax sync fromstart
-    au FileType * setl textwidth=80
+    au BufRead * :set tw=78
     au BufEnter * lcd %:p:h
     au FileType * exe('setl dict+='.$VIMRUNTIME.'/syntax/'.&filetype.'.vim')
 
@@ -52,9 +52,10 @@ if has("autocmd")
                \   exe "normal g`\"" |
                \ endif
 
-    au BufNewFile,BufRead *.R setf r
-    au BufRead .Rprofile setf r
-    au BufNewFile,BufRead *.md setf markdown
+    "au BufNewFile,BufRead,BufEnter *.R,.Rptofile :setf r
+    au BufNewFile,BufRead *.txt :setf txt
+    au BufNewFile,BufRead *.txt :set spell
+    au BufNewFile,BufRead *.md :setf markdown
     "au BufWritePost .vimrc source $MYVIMRC
     "au BufWritePost _vimrc source $MYVIMRC
 
@@ -66,6 +67,14 @@ if has("autocmd")
 
     au BufWritePre * :%s/\s\+$//e
     au FileType c,cpp,java set matchpairs+==:;
+
+    augroup NoSimultaneousEdits autocmd!
+        autocmd SwapExists * let v:swapchoice = 'o'
+        "autocmd SwapExists * echomsg ErrorMsg
+        autocmd SwapExists * echo 'Duplicate edit session (readonly)'
+        autocmd SwapExists * echohl None
+        autocmd SwapExists * sleep 2
+    augroup end
 endif
 
 set modeline
@@ -85,14 +94,7 @@ if v:version >= 703
 else
 	set number
 endif
-
-nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>
-nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>
-
-" bracket matching
 set hlsearch
-nnoremap <tab> %
-vnoremap <tab> %
 
 syntax enable
 set hidden " hide buffers instead of closing them
@@ -100,7 +102,7 @@ set history=1000 " How many lines of history to remember
 set cf " enable error files and error jumping
 set fileformats=unix
 set viminfo+=! " make sure it can save viminfo
-set iskeyword+=$,%,#,-,: " none of these should be word dividers, so make them not be
+set iskeyword+=$,%,#,-,: " none of these should be word dividers
 set showmode
 set showcmd "display incomplete commands
 
@@ -149,9 +151,6 @@ set gdefault
 set incsearch
 set showmatch
 
-nnoremap / /\v
-vnoremap / /\v
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -168,6 +167,9 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
+nnoremap / /\v
+vnoremap / /\v
+
 map <up> <nop>
 map <down> <nop>
 map <left> <nop>
@@ -180,8 +182,15 @@ inoremap <left> <nop>
 vnoremap <left> <nop>
 inoremap <right> <nop>
 vnoremap <right> <nop>
+
 nnoremap ; :
 "nnoremap : ;
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
+nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>
+nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>
+nnoremap <tab> %
+vnoremap <tab> %
 
 let mapleader=','
 nmap <silent><leader>p :set paste!
@@ -236,9 +245,9 @@ inoremap <C-U> <C-G>u<C-U>
 " Useful abbrevs
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iab <silent> ydate <C-R>=strftime("%Y/%m/%d")<CR>
-iab <silent> ydu <C-R>=strftime("%Y_%m_%d")<CR>
-iab <silent> ydt <C-R>=strftime("%Y/%m/%d %H:%M")<CR>
-iab <silent> yti <C-R>=strftime("%H:%M")<CR>
+iab <silent> ydu   <C-R>=strftime("%Y_%m_%d")<CR>
+iab <silent> ydt   <C-R>=strftime("%Y/%m/%d %H:%M")<CR>
+iab <silent> yti   <C-R>=strftime("%H:%M")<CR>
 iab perline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 iab bline """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iab teh the
@@ -247,13 +256,9 @@ iab textbg textbf
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Other stuff
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" have command-line completion <Tab> (for filenames, help topics, option names)
-" first list the available options and complete the longest common part, then
-" have further <Tab>s cycle through the possibilities:
-
 set dict+=/usr/share/dict/words
-set complete=.,w,b,u,t,i,k
-
+set complete=.,b,w,u,t,i
+set completeopt=menu,preview
 set wildmenu
 set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe,*.swp,.git
@@ -261,10 +266,7 @@ set wildchar=<TAB>
 
 set browsedir=buffer
 set report=0
-set uc=75 " after 75 characters write a swap file
-
-cnoremap <C-A> <Home>
-cnoremap <C-E> <End>
+set updatecount=75 " after 75 characters write a swap file
 
 set timeout ttimeout timeoutlen=250
 
