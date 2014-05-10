@@ -22,29 +22,16 @@ Plugin 'matchit'
 set background=dark
 colorscheme kolor
 
-function! InsertStatuslineColor(mode)
-    if a:mode == 'i'
-        hi statusline guibg=Yellow ctermfg=6 guifg=Black ctermbg=0
-    elseif a:mode == 'r'
-        hi statusline guibg=Purple ctermfg=5 guifg=Black ctermbg=0
-    else
-        hi statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
-    endif
-endfunction
-
-" default the statusline to green when entering Vim
-hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocommand Control
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has("autocmd")
     filetype plugin indent on
+    au BufWritePre * :%s/\s\+$//e
     au FocusLost * :wa
-    au BufEnter * :syntax sync fromstart
-    au BufRead * :set tw=78
-    au BufEnter * lcd %:p:h
-    au FileType * exe('setl dict+='.$VIMRUNTIME.'/syntax/'.&filetype.'.vim')
+    "au BufEnter * :syntax sync fromstart
+    au BufRead * :set tw=80
+    "au BufEnter * lcd %:p:h
 
     " When editing a file, always jump to the last known cursor position.
     au BufReadPost *
@@ -52,28 +39,38 @@ if has("autocmd")
                \   exe "normal g`\"" |
                \ endif
 
-    "au BufNewFile,BufRead,BufEnter *.R,.Rptofile :setf r
     au BufNewFile,BufRead *.txt :setf txt
     au BufNewFile,BufRead *.txt :set spell
     au BufNewFile,BufRead *.md :setf markdown
-    "au BufWritePost .vimrc source $MYVIMRC
-    "au BufWritePost _vimrc source $MYVIMRC
 
-    "au InsertEnter * call InsertStatuslineColor(v:insertmode)
-    "au InsertLeave * hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
-
-    "au WinLeave * set nocursorline nocursorcolumn
-    "au WinEnter * set cursorline cursorcolumn
-
-    au BufWritePre * :%s/\s\+$//e
     au FileType c,cpp,java set matchpairs+==:;
+    au FileType xml,html set matchpairs+=<:>
+
+    augroup Toggle autocmd!
+        function! InsertStatuslineColor(mode)
+            if a:mode == 'i'
+                hi StatusLine guibg=Yellow ctermbg=114 ctermfg=0 guifg=Black
+            elseif a:mode == 'r'
+                hi StatusLine guibg=Purple ctermbg=114 ctermfg=0 guifg=Black
+            else
+                hi StatusLine guibg=DarkRed ctermbg=114 ctermfg=0 guifg=Black
+            endif
+        endfunction
+
+        au InsertEnter * call InsertStatuslineColor(v:insertmode)
+        au InsertLeave *
+                    \ hi StatusLine ctermfg=0 ctermbg=247
+
+        "au WinLeave * set nocursorline nocursorcolumn
+        "au WinEnter * set cursorline cursorcolumn
+    augroup end
 
     augroup NoSimultaneousEdits autocmd!
-        autocmd SwapExists * let v:swapchoice = 'o'
-        "autocmd SwapExists * echomsg ErrorMsg
-        autocmd SwapExists * echo 'Duplicate edit session (readonly)'
-        autocmd SwapExists * echohl None
-        autocmd SwapExists * sleep 2
+        au SwapExists * let v:swapchoice = 'o'
+        "au SwapExists * echomsg ErrorMsg
+        au SwapExists * echo 'Duplicate edit session (readonly)'
+        au SwapExists * echohl None
+        au SwapExists * sleep 2
     augroup end
 endif
 
@@ -90,11 +87,10 @@ set shiftround "Always indent/outdent to the nearest tabstop"
 " settings new to Vim 7.3
 if v:version >= 703
     set relativenumber
-    set colorcolumn=+3
+    set colorcolumn=+0
 else
 	set number
 endif
-set hlsearch
 
 syntax enable
 set hidden " hide buffers instead of closing them
@@ -110,6 +106,8 @@ set title
 set titleold=""
 
 set listchars=tab:▸\ ,eol:¬,trail:_
+set listchars+=precedes:<
+set listchars+=extends:>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim UI
@@ -130,24 +128,24 @@ set winminheight=0
 " Visual Cues
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set matchtime=5
-set matchpairs+=<:>
 set scrolloff=10
 set visualbell t_vb=
 set noerrorbells
 set laststatus=2 " always show the status line
 set ttyfast " send lines to terminal faster
+set ttyscroll=5
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text Formatting/Layout
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set autoindent
 set copyindent
-set smartindent
+"set smartindent
 set wrapmargin=2
-set smarttab " use tabs at the start of a line, spaces elsewhere
 set ignorecase
 set smartcase
 set gdefault
+set hlsearch
 set incsearch
 set showmatch
 
@@ -158,7 +156,6 @@ set foldenable
 set foldmethod=indent " Make folding indent sensitive
 set foldlevel=100
 set foldopen-=undo " don't open folds when you undo stuff
-"set foldopen-=search " don't open folds when you search into them
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings
@@ -189,8 +186,8 @@ cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
 nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>
 nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>
-nnoremap <tab> %
-vnoremap <tab> %
+nnoremap <TAB> %
+vnoremap <TAB> %
 
 let mapleader=','
 nmap <silent><leader>p :set paste!
@@ -262,7 +259,6 @@ set completeopt=menu,preview
 set wildmenu
 set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe,*.swp,.git
-set wildchar=<TAB>
 
 set browsedir=buffer
 set report=0
@@ -274,7 +270,6 @@ set timeout ttimeout timeoutlen=250
 " Spelling
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has("spell")
-    " turn spelling off by default
     set nospell
     nmap <silent><leader>s :set spell!
                 \ <CR><Bar>:echo "Spell Check: "
@@ -287,11 +282,10 @@ endif
 set suffixes=~,.aux,.bak,.dvi,.gz,.idx,.log,.ps,.swp,.tar,.o
 
 " Ack and Ctrl-P integration
-nnoremap <leader>a :Ack
 nnoremap \ :Ack<SPACE>
-let g:ctrlp_use_caching = 0
 nnoremap K :Ack! "\b<C-R><C-W>\b"<CR>:cw<CR>
 nmap <c-w><c-]> "tyaw:stjump <c-r>t<cr>
+let g:ctrlp_use_caching=1
 nnoremap <leader>. :CtrlPTag<cr>
 nnoremap <leader><leader> :xa<cr>
 
@@ -312,3 +306,5 @@ set statusline+=\ [%p%%]
 set statusline+=\ tw=%{&tw}
 set statusline+=\ B:%n
 set statusline+=\ %{strftime('%H:%M')}
+
+runtime macros/matchit.vim
